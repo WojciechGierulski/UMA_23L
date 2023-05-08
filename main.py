@@ -106,6 +106,23 @@ def buildTree(df, tree):
     return tree
 
 
+def predict_single(row, tree):
+    if tree.pred is not None:
+        return tree.pred
+    attr = tree.attr
+    if row[attr] not in tree.childs.keys():
+        return -1
+    return predict_single(row, tree.childs[row[attr]])
+
+
+def predict(df, tree):
+    y = []
+    for i, row in df.iterrows():
+        yy = predict_single(row, tree)
+        y.append(yy)
+    return y
+
+
 data = pd.read_csv("./data.csv")
 X = data.drop(columns=["class"], axis=1)
 Y = data["class"]
@@ -124,3 +141,5 @@ tree = Node(Node.all_attributes)
 for i, row in data.iterrows():
     r_df = pd.DataFrame(row.to_frame().T)
     tree = buildTree(r_df, tree)
+
+r = predict(data, tree)
