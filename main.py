@@ -123,23 +123,24 @@ def predict(df, tree):
     return y
 
 
-data = pd.read_csv("./data.csv")
-X = data.drop(columns=["class"], axis=1)
-Y = data["class"]
+if __name__ == '__main__':
+    data = pd.read_csv("./data.csv")
+    X = data.drop(columns=["class"], axis=1)
+    Y = data["class"]
 
-Node.all_classes = list(Y.unique())
-Node.all_attributes = list(X.keys())
-for k in X.keys():
-    Node.possible_values_attribute[k] = list(X[k].unique())
+    Node.all_classes = list(Y.unique())
+    Node.all_attributes = list(X.keys())
+    for k in X.keys():
+        Node.possible_values_attribute[k] = list(X[k].unique())
 
-tree = Node(Node.all_attributes)
+    tree = Node(Node.all_attributes)
 
-# train tree by batch
-# tree = buildTree(data, tree)
+    # train tree by batch
+    # tree = buildTree(data, tree)
 
-# train tree by single instances
-for i, row in data.iterrows():
-    r_df = pd.DataFrame(row.to_frame().T)
-    tree = buildTree(r_df, tree)
+    # train tree by single instances
+    for i, row in data.iterrows():
+        r_df = pd.DataFrame(row.to_frame().T)
+        tree = buildTree(r_df, tree)
 
-r = predict(data, tree)
+    r = predict(data, tree)
